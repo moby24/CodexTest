@@ -14,19 +14,19 @@ const rightRanksElement = document.getElementById("rank-labels-right");
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 const ranks = ["8", "7", "6", "5", "4", "3", "2", "1"];
 
-const pieceSymbols = {
-  wp: "\u2659",
-  wr: "\u2656",
-  wn: "\u2658",
-  wb: "\u2657",
-  wq: "\u2655",
-  wk: "\u2654",
-  bp: "\u265F",
-  br: "\u265C",
-  bn: "\u265E",
-  bb: "\u265D",
-  bq: "\u265B",
-  bk: "\u265A",
+const pieceImages = {
+  wp: "./assets/pieces/wp.svg",
+  wr: "./assets/pieces/wr.svg",
+  wn: "./assets/pieces/wn.svg",
+  wb: "./assets/pieces/wb.svg",
+  wq: "./assets/pieces/wq.svg",
+  wk: "./assets/pieces/wk.svg",
+  bp: "./assets/pieces/bp.svg",
+  br: "./assets/pieces/br.svg",
+  bn: "./assets/pieces/bn.svg",
+  bb: "./assets/pieces/bb.svg",
+  bq: "./assets/pieces/bq.svg",
+  bk: "./assets/pieces/bk.svg",
 };
 
 let game = null;
@@ -133,7 +133,7 @@ function openPromotionChooser(from, to) {
     optionButton.type = "button";
     optionButton.className = "promotion-button";
     optionButton.innerHTML = `
-      <span class="promotion-piece">${pieceSymbols[key]}</span>
+      <img class="promotion-image" src="${pieceImages[key]}" alt="${pendingPromotion.color === "w" ? "White" : "Black"} ${pieceName(pieceType)}">
       <span>${pieceName(pieceType)}</span>
     `;
     optionButton.addEventListener("click", () => {
@@ -158,10 +158,12 @@ function clearSelection() {
 
 function pieceName(pieceType) {
   const names = {
+    p: "Pawn",
     q: "Queen",
     r: "Rook",
     b: "Bishop",
     n: "Knight",
+    k: "King",
   };
   return names[pieceType];
 }
@@ -181,12 +183,13 @@ function renderBoard() {
     squareElement.classList.toggle("capture", Boolean(legalMove && legalMove.captured));
 
     if (!piece) {
-      squareElement.textContent = "";
+      squareElement.innerHTML = "";
       squareElement.classList.remove("piece-light", "piece-dark");
       return;
     }
 
-    squareElement.textContent = pieceSymbols[`${piece.color}${piece.type}`];
+    const pieceCode = `${piece.color}${piece.type}`;
+    squareElement.innerHTML = `<img class="piece-image" src="${pieceImages[pieceCode]}" alt="${piece.color === "w" ? "White" : "Black"} ${pieceName(piece.type)}">`;
     squareElement.classList.toggle("piece-light", piece.color === "w");
     squareElement.classList.toggle("piece-dark", piece.color === "b");
   });
